@@ -1,0 +1,36 @@
+==========================================================
+============ Practica 3. Perceptrón Multicapa ============
+==========================================================
+
+2) Utiliza el conjunto de datos Clasificacion/D Vertebral Column.mat en el script PerceptronMulticapa.m
+
+- Atendiendo a los resultados, ¿en qué época crees que debería dejar de entrenar la red? ¿por qué? 
+
+Deberíamos parar el entrenamiento cuando se obtenga el primer mínimo de la funcion de error de validación. Esto ocurre la mayor parte de las veces alrededor de la epoc 500. Una vez pasado ese número de epocs el modelo sobreaprende y vuelve a elevarse el ECM.
+
+- Comprueba qué ocurre cuando ejecutas el algoritmo con 2000 épocas, prueba en varias ejecuciones distintas para comprobar si el comportamiento varía de una ejecución a otra. ¿A qué crees que se debe la variabilidad de resultados?
+
+Si durante el entrenamiento no se han efectuado las suficientes epocs, el modelo puede no llegar a ser bueno prediciendo las clases del conjunto de datos de testing. Este hecho explica la gran variabilidad de los resultados, puesto que hay casos en los que sí "le ha dado tiempo" a crear un buen modelo, mientras que en otros no.
+
+
+3) Utiliza el conjunto de datos Regresion/D Parkinson Telemonit.mat en el script
+PerceptronMulticapa_N_Pliegues.m
+
+- ¿Cuál es el rango de la función a aprender?
+
+El rango es continuo y puede tomar un conjunto de valores infinito, además de no haber ningún tipo de clasificación en clases como en el apartado anterior.
+
+
+- ¿Qué crees que le estamos pidiendo a la red, que clasifique los patrones de entrada o que realice una regresión de una función general?
+
+En esta ocasión, estamos realizando una regresión puesto que el rango de la función que se está tratando de modelar es continuo y puede tomar un conjunto de valores infinito.
+
+
+- Compara qué ocurre cuando ejecutas el algoritmo con 500 épocas utilizando una beta=1.0 respecto de una beta=0.1, ¿cuál es el ECM mínimo alcanzado en cada caso? ¿a qué crees que se debe esta diferencia?
+
+ECM_beta=0.1 --> 0.48
+ECM_beta=1.0 --> 0.32
+
+Con una diferencia de tasas de aprendizaje tan grande, estamos consiguiendo que el modelo se actualice en pasos muy grandes, lo cual puede generar que mejore o empeore (oscile) e incluso que se quede estancado en un mínimo local. En el caso menor, los pasos son más estables pero seguramente no lleguemos a valores de ECM tan buenos.
+
+ 

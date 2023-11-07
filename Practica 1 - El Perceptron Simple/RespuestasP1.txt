@@ -1,0 +1,17 @@
+=======================================================
+============ Practica 1. Perceptron simple ============
+=======================================================
+
+3)  Comenta con tu palabras lo que ocurre cuando ponemos una tasa de aprendizaje de 0.005 para aprender la función OR en comparación con el caso en que utilizamos una tasa de 0.5.
+
+Como es de esperar, al hacer que la tasa de aprendizaje sea tan pequeña conseguimos que nuestro modelo aprenda (se reajusten los pesos) de manera mucho más lenta que con otras tasas mayores. También correremos el riesgo de quedarnos estancados en óptimos locales.
+
+
+4) Usa una tasa de 0.5 y comenta lo sucede cuando intenta ajustar la función XOR, ¿por qué ocurre?
+
+El problema XOR tiene la particularidad de que emplea una función (XOR) no separable linealmente. Tal y como hemos visto en clases de teoría, el perceptrón simple no es capaz (independientemente de su tasa de aprendizaje) de clasificar completamente todos los patrones.
+  
+
+5) Propón un valor a añadir al conjunto de entrenamiento DatosAND para que el perceptrón no encuentre una solución.
+
+Si introducimos un valor que no cumpla la función AND, habremos conseguido que el perceptrón no sea capaz de clasificar todos los patrones bien. Un ejemplo puede ser 1 0 1.

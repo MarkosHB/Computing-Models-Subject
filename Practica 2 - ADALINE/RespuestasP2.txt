@@ -1,0 +1,7 @@
+=============================================
+============ Practica 2. ADALINE ============
+=============================================
+
+2) ¿Qué ocurre si damos un valor negativo de LR?
+
+En primer lugar, es algo antintuitivo establecer el LR con un valor negativo, puesto que estaríamos dicendo que "queremos que el modelo no aprenda". Desde un punto de vista técnico, esta práctica puede llevar a nuestro modelo a que no converga y a que tenga un comportamiento impredecible. 
