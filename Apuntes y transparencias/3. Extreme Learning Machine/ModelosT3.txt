@@ -1,0 +1,91 @@
+=================================
+==== Modelos Computacionales ====
+=================================
+ 
+ Extreme Learning Machine
+ ------------------------
+  |-> Modelo de dos capas, una capa oculta con funcion sigmoide, 
+  	no hay funcion de transferencia, sin sesgo en capa de salida
+  
+  |-> Igual que el ADALINA ANALITICO pero recibiendo 
+  	la entrada es la salida de las funciones de base (estimar los T)
+  	(evitamos la parte no-lineal del proceso)
+  
+  |-> Cero bucles for en el entrenamiento (estima t, calc salida funciones base)
+  
+  |-> Muy eficiente con respecto al entrenamiento, no tanto en el testeo
+  	(Calculo de la matriz inversa)
+  	
+  |-> Generalmente no hay overfitting (grafica siempre decreciente)
+  	Podemos meter todas las neuronas que queramos (no es critico)
+  	
+  |-> No transmite los errores para atras, siempre vas hacia adelante
+  
+  |-> Calculo directo de los pesos de salida
+  
+  |-> En el primer espacio (K) es no lineal, en el segundo es lineal (L)
+  
+  |-> Matriz t aleatoria que no se modifica, pq obvias el principio
+  
+  |-> Salidas en reales, entonces aplicar la funcion maximo te quedas con la mejor 
+  	(no la softmax pq es mas lento)
+  
+  Estimacion de los w
+  -------------------
+   |-> No se podrian calcular de forma analitica 
+   	si hubiera f. de transferencia o f. signo en la capa de salida
+   	(pq no es un algoritmo de decenso del gradiente)  
+   	
+   	ADALINA y EML -> Analitica // Perceptron -> No analitica
+  
+  Estimacion de los t => k+1 pq tenemos sesgo en la capa oculta
+  -------------------
+   |-> De forma aleatoria, *** muchas funciones de base *** para despues filtrar
+   		Regularizacion = Coefs. pequeños a los w 
+   |-> La criba se hace añadiendo otro objetivo: 
+   		*** Hacer que los w sean 0 *** + error pequeño
+   
+   Funcion h
+   ---------
+    |-> Creamos la H salida para cada patron de la f. de base por cada neurona
+    
+   
+   Problema de optimizacion => Resolver la w
+   ------------------------
+    |-> Minimizar la norma de W + "ECM"
+    |-> C es la importancia que le das a cada idea (min error y modelo sencillo)
+    	Probar varios Cs y coger el mejor
+    	Minimizar la norma de cada j componente asociada a las n clases
+    	
+    |-> l2 es mas sensible a outliers que l1 (valor absoluto)
+    |-> l1 no se puede hacer en analiticamente	
+  
+  
+  Estimacion de parametros
+  ------------------------
+   |-> I / C => Termino para perturbar (mult. los elemtnos de la diag.) la matriz
+   	Facilita obtener la inversa de la matriz && pesar las ideas (estabiliza)
+   	C > 0 para mejorar el modelo, si fuera al reves empeoriamos el modelo
+   
+  
+  Modelo neuronal
+  ---------------
+   |-> Test => x*t - sigmoide (h) - *w - f.maximo
+   
+  Modelo kernel
+  -------------
+   |-> Agrupar las h entre si (multiplicativos de h para sustituir la f. kernel)
+   	La funcion h no la podemos calcular (el kernel si lo conozco)
+   	
+   |-> y(x) = h(x)*w = h(x) * H' = Kernel(x) //Funcion gaussiana
+   	La diagonal van a ser unos, simetrica (facil para la inversa)
+   
+   |-> La H es de entrenamiento
+   
+   En redes RBF las gaussianas pueden ser raras, aqui (en el kernel) no
+   
+   *** EXAMEN: Los parametros de cada modelo ***
+  
+   Dicretizamos con la funcion maximo 
+   
+  

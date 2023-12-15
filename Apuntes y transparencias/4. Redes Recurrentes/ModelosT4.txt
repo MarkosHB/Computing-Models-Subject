@@ -1,0 +1,121 @@
+==================================================================
+=========== Modelos Computacionales. Redes Recurrentes ===========
+==================================================================
+
+*** EXAMEN *** Codigo de las practicas, decir algo sobre lo que se hace
+		Otro ejercicio mas sencillo para escribir en MATLAB
+
+ Modelo de Hopfield discreto
+ ---------------------------
+  |-> Bucles en la red = Red recurrente
+  |-> Un solo tipo de nodo (capa oculta H)
+  	No hay autoconexiones (memoria de la serie temporal)
+  
+  |-> K unidades + matriz simetrica, positiva definida de pesos wij[KxK]
+  	 (elem diagonal = 0, no hay autoconexiones, con autovalores > 0)
+  
+  |-> sk(i) = salida de cada unidad K por cada iteracion I
+  
+  |-> Se para cuando sk(i+1) = sk(i) // Almenos un cambio en alguna neurona
+  	sk(i+1) 1 o -1 dependiendo de si supera el sesgo-kesimo
+  
+  |-> Actualizaciones *** secuencial *** (neurona a neurona) y paralelo
+  
+  |-> sk(i+1) = SUM(w_jk * sj) // Mide la correlacion entre i, j
+  	Maximizar la correlacion (div por dos pq se cuenta la conexion dos veces)
+  
+  |-> Sesgo positivo => Desactiva s_i && Sesgo negativo => Activa s_i
+  	sk(i+1) = SUM(w_jk * sj - teta_k)
+  
+  |-> Funcion de optimizacion = funcion de energia 
+  
+  Teorema de convergencia
+  -----------------------
+   |-> Demostrar que decrece la energia en cada paso
+   |-> Neuronas bipolares => Si hay cambio entonces sk(i+1) = -sk(i)
+   
+  
+  Nº estados es finito = 2^k && Bipolar && M.Simetrica && T.Convergencia 
+  	=> Se encuentra Min. Local
+  
+  Pesos simetricos:
+  	Optimos locales => (-1,1) && (1,-1) // Se estabiliza en uno o en otro
+  Pesos no simetricos:
+  	No converge, va cambiando los estados de las neuronas todo el rato
+
+ Modelo de Hopfield continuo
+ ---------------------------
+  |-> Neuronas trabajan en el intervalo [-1,1]
+  |-> sk(i+1) = sk(i) + delta_sk(i)
+  	Variacion en funcion de la tangente hiperbolica [-1,1]
+  		Logistica no vale, solo daba valores [0,1]
+  
+  Primeros dos pasos no hay variacion => Para no salirse del rango [-1,1]
+   |-> Si estamos en -1 y la tg hiperbolica dice decrecer => No cambiamos, delta=0
+   |-> Si estamos en 1 y la tg hiperbolica dice crecer => No cambiamos, delta=0
+ 
+ Hopfield no garantiza el minimo global, 
+ 	se queda con uno local pero es muy eficiente
+ 
+ ============================================================================
+ Sesion Practica: Resolver problemas de optimizacion usando redes de Hopfield
+ ============================================================================
+ 
+  Maximizar un problema de optimizacion es equivalente a minimizar su negado 
+  *** EXAMEN: Simplificacion de uno de los 4 ejercicios vistos en clase ***
+ 
+  Problema de la mochila
+  ----------------------
+   |-> Lineal de enteros (funcion linal + solucion vector binario)
+   |-> intlinprog(-v, upperbound=1, lowerbound=0, ...); #Minimizacion
+   
+  
+ ==================== 
+ Memorias asociativas
+ ====================
+ 
+  |-> Capacidad de recordar patrones ya aprendidos y recuperarlos cuando hay
+  	entradas parciales/incompletas asociadas a esos patrones
+  
+  |-> Patrones claves y patrones de referencia (distancia euclidea)
+   
+  |-> Heteroasociativa (clave=x,referencia=y), dos espacios con diferente dimension
+  	Autoasociativa -> misma dimension entre los espacios
+  
+  Asociador lineal => Heteroasociativo  // Simple pero hay ortonormalidad
+  ----------------
+   |-> Feed-Forward (flechas para adelante) // En BAM son bidireccionales
+   
+   |-> Claves (vectores de entrada) ortonormales y de norma uno
+   
+   |-> Cada entrada K se une con todas las unidades de salida J
+   
+   Entrada + Perturbacion = Salida + f(Perturbacion)
+  
+  Asociador no lineal / Red de Hopfield => Autoasociativo 
+  -------------------------------------
+   |-> Patron mas similar al proporcionado en la entrada (que este en memoria)
+   	Base de datos de claves, estabilizado en un punto en concreto
+  
+   |-> Dimension de las claves que estamos memorizando K
+   
+   |-> *** Estabilizado si no hay cambio en ninguno de los pesos de la red ***
+  
+   |-> Signo de la neurona solo depende del valor de sk (Un solo patron)
+   
+   |-> Memorizar la clave y la opuesta => Opuesta si mas de la mitad
+   
+   |-> Capacidad = Patrones almacenados / Neuronas 						
+  Memoria asociativa Bidireccional (BAM) => No lineal, Heteroasociativa
+  --------------------------------------
+   |-> Clave - Referencia (uno a uno) pero de distintas dimensiones
+   
+   |-> Conexiones bidireccionales (si algo cambia, el resto tambien)
+   	Hasta que se llegue a un punto de convergencia
+   
+   |-> Actualizacion de pesos => Umbrales de j = eta // k = teta
+   
+ =================================================================================
+ =================================================================================
+  
+  

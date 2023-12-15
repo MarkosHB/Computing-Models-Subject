@@ -1,0 +1,108 @@
+=========================================================================
+=========== Modelos Computacionales. Sistemas autoorganizados ===========
+=========================================================================
+
+ Sistemas autoorganizados => Version neuronal de k-medias (no-supervisada)
+ ------------------------ 
+  |->  Definicion. Aprende por si misma reconocer los rasgos representativos
+  			de las clases a clasificar (centroides del grupo)
+  |-> Dos objetivos: Minimizar dist de los centroides al patron
+  			Minimizar el numero de centroides (con buena clasif.)
+  |-> Aplicaciones. *** Agrupamiento, prototipado (representante de cada grupo) ***
+  			Similitud, reducciones de la dimensionalidad
+  
+  |-> Dos capas (neuronas capa 1 = nº patrones, capa 2 = grupos para clasif.)
+  
+  |-> Aprendizaje no supervisado // Supervisado con refuerzo (corregir pesos)
+  
+ Redes neuronales competitivas no supervisadas => Feed-Forward
+ ---------------------------------------------
+  |-> Entradas K , salidas J (no sabemos el valor de J)
+  
+  |-> Prototipo de la clase j-esima lo define los pesos que conectan a la neurona
+  	j con las variables del espacio de entrada (P1 = w_11, w_21, ..., w_K1)
+  	
+  |-> Criterio del codo. Si no sabemos cuantas J hay, cortar en un punto donde
+  			   se el cambio no sea significativo (si J=N -> dist=0)
+  			   
+  |-> Distancia euclidea d(x_n , w) para ver la distancia del patron al centroide
+  
+  |-> Potencial sinaptico. h_j(x_n) = w1j*xn1 + ... + wkj*xnK - theta_j
+  	1 si max potencial sinaptico
+  	0 en otro caso // si hay empate, se elige una al azar (poco probable)
+  
+  |-> Min distancia al patron es maximizar el potencial sinaptico
+  
+  |-> Funcion de energia => Minimiza la distancia del patron a su clase
+  				Solamente tenemos que estimar los w
+  
+  Descenso del gradiente en linea => Competitiva
+  -------------------------------
+   |-> a_nj se calcula en cada paso
+   |-> Solo gana una neurona y es la unica que se modifica
+   |-> Tasa de aprendizaje decreciente en funcion de N*I
+  
+  Descenso del gradiente por lotes
+  --------------------------------
+   |-> Tasa de aprendizaje en funcion de I
+   |-> Un eta por cada iteracion
+   
+  Posibles limitaciones del modelo
+  --------------------------------
+   |-> Algunas unidades pueden no ganar nunca, no se actualicen nunca
+   	Inicializacion crucial (rand no suele valer)
+   
+   |-> ECM muy sensible al nº de patrones por clase 
+   	(tienden a hacer grupos muy grandes)
+   |-> Poderamos cada grupo con 1/nj que es un coste para eliminar 
+   	el efecto de que haya patrones que sobreajusten la clasificacion
+   	
+ ================================================================================
+ ================================================================================
+  
+  Redes competitivas no supervisadas => No vecindad
+  Redes de Kohonen => Vecindad y no supervisada
+  Red competitiva por refuerzo => Supervisado y no vecindad
+  
+  Red de Kohonen
+  --------------
+   |-> Espacio de Entrada K // Espacio/Grid topologico (neuronas) W => N1*N2 
+   |-> Solo se realizan modificaciones en el espacio de entrada
+   |-> Cada neurona en la red representa un punto en el espacio de entrada
+   
+   Arquitectura => Posicion de la neurona definida por sus pesos sinapticos
+    |-> Las neuronas vecinas siempre seguiran siendo vecinas (espacio topolgico)
+    |-> Vector de pesos asociado (en que posicion del espacio de entrada esta)
+   
+   Cada neurona tiene (p1,p2) en topologico y w1 en la entrada
+   
+   Vecindad => Siempre en el espacio topologico
+    |-> Distancia euclidea entre los puntos o Mahalanobis
+    |-> Reducir el radio de vecindad conforme avanzan las iteraciones
+    		Concepto Exploracion /Explotacion
+    
+   Dinamica de computacion => Igual que la anterior + vecindad y topologico
+    |-> Max potencial sinaptico = h_r es la neurona ganadora
+    |-> Modificar las vecinas a la ganadora en menor medida
+    
+   Inicializacion => Con random te saltas el concepto de vecindad 
+    |-> Pesos tienen que ser parecidos con sus vecinos (patrones parecidos)
+  
+  
+  Redes neuronales competitivas supervisadas => Sin vecindad, pero etiquetada
+  ------------------------------------------
+   |-> Sabemos la dimension del espacio de salida J, Feed-Forward, KxJ
+   |-> Tenemos la etiqueta de clase. Siempre hay un prototipo por clase
+   	El prototipo se acerca al patron siempre y cuando acierto
+   	Me alejo cuando fallo (no pertenece a la clase)
+   
+   Tasa de aprendizaje => Dinamica siempre
+    |-> Si acierto, la reduzco // Si fallo, la aumento 
+    	Cambiarla mientras que sea menor de un eta maximo 
+    	  (puede converger al infinito si fallas en iteraciones seguidas) 
+    
+    |-> Te alejas del patron cuando fallas, te acercas cuando aciertas
+    
+ ================================================================================
+ ================================================================================
+  

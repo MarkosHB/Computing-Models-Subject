@@ -1,0 +1,187 @@
+=================================
+==== Modelos Computacionales ====
+=================================
+ 
+ Perceptron Simple
+ -----------------
+  |-> Una unica neurona, unidad basica de una red neuronal
+  |-> Clasificacion binaria (asignatura), regresion
+  |-> Salida generada por el Potencial sinaptico (sigma) // 0,1 o -1,1
+  |-> Solo resuelve problemas lineales (No puede hacer el problema XOR)
+ 
+ Tipos de unidades de proceso
+ ----------------------------
+  Bipolar (mas empleada en la asignatura)
+   |-> Codificacion en y -> -1,1
+   |-> Theta es el umbral que determina la frontera
+   |-> Suma ponderada = Potencial Sinaptico -> u
+   
+  Binaria 
+   |-> Codificacion en y -> 0,1
+   |-> Igual en el resto, cambia la frontera
+   
+ Estimacion de parametros en el perceptron simple
+ ------------------------------------------------
+  |-> Partir de valores aleatorios, modificarlos cuando la salida no coincida
+  	con la deseada, iterando sobre tres elementos: 
+  	- nºiteraciones i = 1,..,I
+  	- Para cada iteracion patron a patron n = 1,..,N
+  	- componente del vector que estamos actualizando k = 1,..,K
+  		(numero de columnas de la base de datos)
+  
+  |-> Pesos sinapticos modificados punto a punto, dato a dato 
+  	(la siguiente a partir de la anterior)
+  
+  |-> Los patrones solo se modifican cuando haya error de clasificacion
+  	yn - ŷn(i) = 0 --> Coinciden y se anula el cambio
+  
+  n(i) // eta
+  |-> Al comienzo, n(i) debe ser grande e ir decreciendo a medida que se corrige
+ 	Exploracion / Explotacion (cambios pequeños para maximizar)
+  |-> Funcion decreciente conrespecto a la iteracion 
+  	(por encima de cero) Si no, maximizariamos el error
+  |-> Tambien puede ser constante (0.5) pero no tiene pq
+  |-> Limite inferior (0) y superiores (no sabemos todavia, mas adelante)
+  
+  Funcion de transferencia es f. signo -> a trozos dependiendo de lo que vale ŷ(i)
+  
+  *** Si nos equivocamos por abajo, aumentamos el w_k (positivo) y viceversa ***
+  
+ Modificacion del sesgo (pasar el theta al lado izq de la ecuacion)
+ ---------------------- 
+  |-> x_nK+1 = -1 y w_K+1 = 0 supone que x_nK = -1
+  |-> La k pasa a ser acotada por K+1, al haber añadido el theta
+  
+  *** theta = w_K+1 ***
+ 
+ Criterios de parada
+ -------------------
+  |-> Hasta ahora, no habia condicion de parada (llegar al nº max de iteraciones)
+  	Complejidad O(n^3)
+  	
+  |-> Cambio del error cae por debajo del Umbral de error (ha convergido)
+  
+ Teorema de convergencia
+ -----------------------
+ Solo si es linealmente separable, se encuentra una solucion en nº finito de it.
+ 
+ Es linealmente separables si hay un conjunto de paramatros que son capaces 
+ de separar las clases en dos grupos, por lo que cumplen la condicion 
+ 
+ La distancia que hay entre lo que tenemos [w_k(i,n+1)] 
+ con lo que idealmente es [w_k*] , debe ser mas pequeña que el desglose 
+ de este punto (extraemos uno para compararlas distancias)
+ 
+ Si nos hemos equivocado, el sentido del error es irrelevante pq esta al cuadrado
+ // Siempre va a ser 2 o -2 que al cuadrado es 4
+ 
+ *** La cota superior necesita conocer el optimo (que no sabemos donde esta) ***
+ Por lo que no podemos determinar la cota superior de eta
+
+ Estimacion de la tasa de aprendizaje
+ ------------------------------------
+ El eta optimo -> aparece el w_k optimo (mismo problema)
+ La simplificacion se hace suponiendo que ambos son iguales
+ La norma de todos los vectores w vale 1 gracias a esta simplificacion
+ 
+ Podemos sustituir theta por la expresion que hemos optenido (eta* optimo)
+ Asumiendo que el optimo es el punto en el que estamos
+ 
+ ================================================================================
+ ================================================================================
+ 
+ Regla de aprendizaje normalizada
+ --------------------------------
+  |-> La norma con el eta optimo la actualizacion de par. tiene que la 
+  	norma del vector es igual a 1
+  |-> Hemos asumido algo en el eta* para que la norma del vector sea 1
+  |-> Normalizar un vector es dividir sus componentes por su norma (modulo)
+  
+ Interpretacion de la regla de aprendizaje del Perceptron
+ --------------------------------------------------------
+  |-> Si a(i,n) * w(i,n) <= 0 entonces hay error de clasificacion (solo)
+  |-> Funcion de clasificacion E(w) = - SUM(a(i,l) * w(i,l)
+  |-> Misma regla de clasificacion que la parte anterior
+   
+  *** Minimizamos el error de clasificacion de patrones ***
+  	
+ Estimacion por lotes
+ --------------------
+  |-> Nos quitamos un bucle [N] (tratamos a todos los patrones a la vez)
+  	Por lo tanto, se actualizan una unica vez
+  |-> No todos los patrones son igual de relevantes
+  |-> Gradiente de E(w) = - SUM(a(i,l)) --> Al derivar sobre w se va
+  Solo se actualiza tras haber recorrido toda la base de datos (patrones)
+  
+ La regla del bolsillo
+ ---------------------
+  |-> Almacenamos el vector de pesos sin haberlo modificado
+  	Buffer con el potencial mejor vector para poder recuperarlo
+ 
+ ================================================================================
+ ================================================================================
+ 
+ ADALINA (No hay funcion signo) = Sin funcion de activacion
+ -------
+  |-> Funcion de activacion (signo) ahora es lineal, problema de actualizacion
+  	Error cuadratico medio //Esta funcion es continua (no discreta)
+  
+  |-> Salidas en continuo, por lo que tenemos que discernir la frontera
+  	(funcion maximo, mayores que cero...)
+  
+  |-> Problema de optimizacion es minimizar el error cuadratico medio
+  
+  |-> Al cuadrado (para hacerlo positivo), 
+  	no valor absoluto para poder diferenciarlos,
+  	outliers contribuyen mucho al error, (error cuadratico medio muy sensible)
+  	ventajas [descenso de gradiente] desventaja [sensible outliers]
+  
+ Estimacion de parametros en linea
+ ---------------------------------
+  Iteracion a iteracion , patron a patron (I,N) + bucle interno con K (uno a uno)
+  
+  *** Formula variacion de eta *** (derivada del error)
+  
+  Algoritmo. Lineal no hay funcion signo
+  
+ Estimacion de parametros por lotes
+ ----------------------------------
+  |-> Funcion de error: Promedio de los errores por patron (1/2N) div.por N
+  |-> Sumatorio de 1aN pq ahora son todos los patrones los que influyen
+  	Ahora vamos iteracion a iteracion
+  
+  |-> La actualizacion de w se hace despues de recorrer todos los patrones
+  ADALINA puede hacer el AND pero no el XOR (no es linealmente separable)
+  
+ Version analitica no iterativa 	*** CAE CASI SEGURO, ES ALGO NUEVO ***
+ ------------------------------
+  |-> Formato matricial. Patrones = filas y atributos + theta (-1) = cols.
+  |-> Minimizar la norma de Y - Xw (salida esperada - estimada)
+  
+  Matriz pseudo-inversa de Monpenrose => (X'X)^-1 * X'
+  
+ Neuronas de salida contiua
+ --------------------------
+  |-> Modelo funcional. 
+  	Sustituto de la funcion signo (discreto) por funcion g (continua)
+  	G debe ser derivable y no decreciente
+  	
+  Funciones empleadas: *** Funcion logistica *** o tangente hiperbolica
+  	Dependen de valores de su propia funcion (agilizar los calculos)
+  	Pasan de los reales a [0,1] o [-1,1] (eficiencia)
+  	Beta es la pendiente de la funcion (suele ser igual a 1)
+  	Beta muy pequeño, es practicamente una constante (mas alargada es peor)
+  
+  |-> Problemas de optimizacion.
+  	Error cuadratico promedio, tenemos que calcular la derivada de g
+  	ECM dividir por el size del data, no por 2
+   	  (siempre es dos es para quitar el exp tras la derivada)
+   	  
+  	Igual que el ADALINA, pero introducimos la funcion g
+  	Iteracion a iteracion, patron a patron
+  	La salida de g la tienes ya calculada al comienzo (a priori)
+  	Estimacion por lotes, eta / N, sumatorio de N
+  	
+ ===============================================================================
+ ===============================================================================
+ 

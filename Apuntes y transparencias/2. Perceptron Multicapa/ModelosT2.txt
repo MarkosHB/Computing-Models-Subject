@@ -1,0 +1,148 @@
+=================================
+==== Modelos Computacionales ====
+=================================
+ 
+ Perceptron Multicapa
+ --------------------
+  |-> Modelo XOR se puede hacer con dos capas (dos neuronas en capa oculta)
+  |-> Problema de regresion (en el modelo multicapa) -> Una unica salida real 
+  
+  Aproximador universal , Clasificacion de patrones (2 o mas clases) , Regesion
+  	(calcular cualquier funcion booleana, aprox cualquier funcion continua)
+     
+  Deep Learning -> red neuronal de muchas capas ocultas
+ 
+  Espacio de las funciones de base (en la capa oculta)
+  --------------------------------
+   |-> Transformar los patrones del espacio original en otro en el que 
+   	el problema sea linealmente separable. Poner un plano en el nuevo.
+   
+   Espacio variables de entrada -> X1, X2
+   Espacio en capa oculta -> phi1, phi2
+  
+   Modelo funcional
+   ----------------
+    |-> Combinacion lineal de las funciones de base
+    
+    Capa de entrada -> T[LxK+1] -> Capa oculta(s) -> W[LxJ] -> Capa de salida
+         [ K ]                         [ L ]                       [ J ]
+         
+    Para poder eliminar una clase de salida debemos no trabajar en reales.
+    Dividir en 5 clases con 4 salidas *** Solo si es discreta {0,1} && suma = 1 ***
+    
+    Podemos cambiar la funcion de dentro de las neuronas
+    Neuronas locales y globales en la entrada (modelo mixto)
+    
+    *** Pasar de un espacio de reales a discreto {0,1} -> 1 al max y 0 al resto ***
+    
+    Nomenclatura
+    ------------
+     |-> La funcion g1 (funciones de transferencia de capa) suele no incluirse
+     |-> La funcion g2 es la funcion sigmoide (la de la capa oculta)
+     |-> Los W son los parametros que conectan las capas ocultas con las salidas
+     
+     ***  SIEMPRE HAY SESGO EN LAS CAPAS OCULTAS , SUELE NO HABER EN LA DE SALIDA
+     Sin sesgo en la capa de salida , va hasta K+1 por el sesgo de la capa oculta
+     Añadir un sesgo en la propia neurona de salida, restarle un theta
+     ***  NO SE TOCA EL K+1 DE LAS OCULTAS SI SE AÑADE EN LAS DE SALIDA
+     
+     Objetivo: Dar valores a las matrices T y W para cumplir una metrica (ECM...)
+     
+     Codificacion a partir de puntos de referencia:
+     El theta en la salida permite hacer que las clases clasificadas 
+     con 0 (arbitrario) se clasifiquen en su propia clase 
+     	(evitamos que 0 sea un cajon desordenado)
+     
+    Problema de optimizacion
+    ------------------------
+     |-> Min (Sumatorio doble por filas y columnas)
+     
+    Estimacion de paramatros
+    ------------------------
+     |-> No depende del descenso de gradiente 
+      		(tasa de aprendizaje, añadir el error...)
+      
+     |-> Derivadas parciales con respecto a T y W  
+		Feed Forward (calculo de la salida)
+		Backward (error desde la salida)
+		
+     h_jn(i) -> Salida capa de neurona de salida antes de aplicar g1
+     u_ln(i) -> Salida capa oculta antes de aplicar g2
+     
+     h_jn(i) = g2 (u_jn(i))
+     y^_nj(i) = g1(h_jn(i))
+     
+     Funcion de Error
+     ----------------
+     (i,n+1) -> (i,n) //Bien
+     (i+1,n) -> (i,n) //Mal
+     
+     w_lj(i,n+1) = w_lj(i,n) + delta w_lj(i,n) 	// Matriz oculta - salida
+     -----------------------------------------
+     La regla delta es una sustitucion del resultado de la derivada de la 
+     	funcion de error (saber de donde se parte hasta llegar ahi)
+     
+     *** No tenemos sumatorios (afecta solo a la neurona de salida corresp.) ***
+     		w_L1 solo afecta a la neurona de salida y^ 1
+     
+     t_lk(i,n+1) = t_lk(i,n) + delta t_lk(i,n) 	// Matriz Entrada - Oculta
+     -----------------------------------------
+     s es una funcion de t, por lo que se queda en la regla de la cadena
+     *** Aqui si hay sumatorio pq afecta a todas las neuronas de la capa oculta ***
+     
+     
+    Entrenamiento por lotes
+    -----------------------
+     |-> Los N patrones a la vez, por lo que dividimos el error total entre N (ECM)
+     |-> Los pesos sinapticos no dependen de n (entradas) se cambian despues de
+     		la evaluaciones de todos los patrones solamente entonces
+     
+    Regla de aprendizaje con Momentos 
+    ---------------------------------
+     |-> Tener en cuenta en la variacion de un parametro tambien el gradiente de
+     	 la iteracion anterior y realizar un promedio con el gradiente de la
+     	 iteracion actual
+     
+     Consecuencia: Efecto de reduccion drastica de las fluctuaciones del gradiente
+     en iteraciones consecutivas, puesto que con frecuencia se produce cierto 	
+     zigzagueo en el descenso por el gradiente que hace que el algoritmo sea lento
+     
+     Efecto acumulador -> En cada caso reduce el efecto (muelle) // CORTO PLAZO
+     Efecto estabilizador -> Reduce el impacto general de las curvas // LARGO PLAZO
+    
+    
+    Observaciones de algoritmos de aprendizaje
+    ------------------------------------------
+     |-> Descenso de gradiente: Sensible a convergencia lenta, optimos locales,
+     		explosion de gradientes en deep neuronal networks y desvanecimiento
+     |-> Quickprop: Ajuste dinamico de la tasa de aprendizaje durante entrenamiento
+     		Error disminuye -> Acelera LR -> Converger mas rapido
+         Limitaciones -> Sensible a eleccion de hiperparametros y menos estable
+         	que otros algoritmos mas modernos, aunque sigue funcionando  
+     
+     
+==================================================================================
+================================================================================== 
+  
+  
+  Modelo probabilistico
+  ---------------------
+  Funcion sigmoidal para problemas de clasificacion binaria -> cada neurona de 
+  salida tiene un valor entre 0-1 pero no garantiza que su suma sea 1 -- PROBLEMA
+  
+  ***
+  softmax en la capa de salida
+  	Entrada -> vector de numeros reales 
+  	Salida -> vector con probabilidades normalizadas que suman 1 
+  ***
+  
+  CONCLUSION
+  	 Sigmoide -> Clasificacion binaria ; softmax -> Clasificacion Multiclase
+  	
+
+  Redes de funciones de base radial
+  ---------------------------------
+   |-> Funcion de activacion = Gaussiana
+
+
+     
